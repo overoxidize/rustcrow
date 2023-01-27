@@ -5,6 +5,7 @@ use solana_program::program_error::ProgramError;
 pub enum EscrowError {
     #[error("Invalid Instruction")]
     InvalidInstruction,
+    NotRentExempt,
 
 }
 

@@ -8,7 +8,7 @@ use solana_program::{
     sysvar::{rent::Rent, Sysvar}
 };
 
-use crate::instruction::EscrowInstruction;
+use crate::{instruction::EscrowInstruction, error::EscrowError};
 
 pub struct Processor;
 impl Processor {
@@ -38,6 +38,13 @@ impl Processor {
             return Err(ProgramError::IncorrectProgramId)
         }
 
+        let escrow_account = next_account_info(account_info_iter)?;
+
+        let rent = &Rent::from_account_info(next_account_info(account_info_iter)?)?;
+
+        if !rent.is_exempt(escrow_account.lamports(), escrow_account.data_len()) {
+            return Err(EscrowError::NotRentExempt.into())
+        }
         Ok(())
     }
 }

@@ -25,6 +25,7 @@ pub enum EscrowInstruction {
 impl EscrowInstruction {
 
     pub fn unpack(input: &[u8]) -> Result<Self, ProgramError> {
+        // Picks an instruction to build, and then builds it.
         let (tag, rest) = input.split_first().ok_or(InvalidInstruction);
 
         Ok(match tag {
